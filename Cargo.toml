@@ -5,6 +5,7 @@ members = [
     "crates/macro",
     "crates/codegen",
     "crates/chaintester",
+    "crates/struct-macro",
     # "tests",
     "examples"
 ]

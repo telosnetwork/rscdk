@@ -122,6 +122,9 @@ pub use serializer::{
 };
 
 ///
+pub use structpacker::StructPacker;
+
+///
 pub mod db;
 pub use db::{
     PrimaryValueInterface,
