@@ -13,7 +13,7 @@ static mut ALLOC: allocator::bump::BumpAllocator = allocator::bump::BumpAllocato
 #[allow(unused_variables)]
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
-    let msg = format!("{:?}", info.message().unwrap().as_str().unwrap());
+    let msg = format!("{:?}", info.message().as_str().unwrap());
     self::vmapi::eosio::check(false, &msg);
     core::arch::wasm32::unreachable();
 }

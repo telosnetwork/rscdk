@@ -59,7 +59,7 @@ pub fn printui(value: u64){
 ///
 pub fn printi128(value: i128){
     unsafe {
-        let _value = Int128{lo: (value as u128 & 0xFFFF_FFFF_FFFF_FFFF) as u64, hi: (value as u128 >> 32) as u64};
+        let _value = Int128{lo: (value as u128 & 0xFFFF_FFFF_FFFF_FFFF) as u64, hi: (value as u128 >> 64) as u64};
         return intrinsics::printi128(&_value);
     }
 }
@@ -67,7 +67,7 @@ pub fn printi128(value: i128){
 ///
 pub fn printui128(value: u128){
     unsafe {
-        let _value = Uint128{lo: (value & 0xFFFF_FFFF_FFFF_FFFF) as u64, hi: (value >> 32) as u64};
+        let _value = Uint128{lo: (value & 0xFFFF_FFFF_FFFF_FFFF) as u64, hi: (value >> 64) as u64};
         return intrinsics::printui128(&_value);
     }
 }
