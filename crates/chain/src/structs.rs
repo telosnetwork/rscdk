@@ -522,6 +522,15 @@ impl Uint256 {
     pub fn swap(&self) -> Self {
         Self { data: [self.data[1], self.data[0]] }
     }
+
+    pub fn to_big_endian(&self) -> Self {
+        Self {
+            data: [
+                u128::from_be(self.data[1]),
+                u128::from_be(self.data[0]),
+            ],
+        }
+    }
 }
 
 impl Packer for Uint256 {
