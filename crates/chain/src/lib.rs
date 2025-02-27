@@ -9,11 +9,28 @@ mod allocator;
 #[global_allocator]
 static mut ALLOC: allocator::bump::BumpAllocator = allocator::bump::BumpAllocator {};
 
+/// Rust 1.81.0 introduced a breaking change switching `PanicInfo::message()` return type from Option<T> to T.
+/// The conditional compilations enables the compatibility with the newer compilers without breaking
+/// with the older ones.
+/// 
+/// See the release notes for additional information: https://releases.rs/docs/1.81.0/#compatibility-notes
+#[rustversion::before(1.81)]
+#[cfg(all(not(feature = "std"), target_arch = "wasm32"))]
+fn panic_info_to_message<'a>(info: &'a core::panic::PanicInfo<'a>) -> &core::fmt::Arguments<'a> {
+    info.message().unwrap()
+}
+
+#[rustversion::since(1.81)]
+#[cfg(all(not(feature = "std"), target_arch = "wasm32"))]
+fn panic_info_to_message<'a>(info: &'a core::panic::PanicInfo<'a>) -> core::panic::PanicMessage<'a> {
+    info.message()
+}
+
 #[cfg(all(not(feature = "std"), target_arch = "wasm32"))]
 #[allow(unused_variables)]
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
-    let msg = format!("{:?}", info.message().unwrap().as_str().unwrap());
+    let msg = format!("{:?}", panic_info_to_message(info).as_str().unwrap());
     self::vmapi::eosio::check(false, &msg);
     core::arch::wasm32::unreachable();
 }
